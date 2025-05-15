@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Where is it 3:36?</title>
+</head>
+<body>
+  <h1 id="output">Loading...</h1>
+
+  <script>
+    const timezoneCountries = {
+      "-12": ["Baker Island (US)"],
+      "-11": ["American Samoa"],
+      "-10": ["Hawaii (US)", "French Polynesia"],
+      "-9": ["Alaska (US)"],
+      "-8": ["US West Coast"],
+      "-7": ["US Mountain Time"],
+      "-6": ["Central America"],
+      "-5": ["Colombia", "Peru", "Eastern US"],
+      "-4": ["Venezuela", "Bolivia"],
+      "-3": ["Argentina", "Brazil (East)"],
+      "-2": ["South Georgia Islands"],
+      "-1": ["Azores (Portugal)"],
+      "0": ["UK", "Portugal", "Iceland"],
+      "1": ["Spain", "France", "Germany"],
+      "2": ["South Africa", "Egypt"],
+      "3": ["Saudi Arabia", "Moscow (Russia)"],
+      "4": ["UAE", "Oman"],
+      "5": ["Pakistan", "Uzbekistan"],
+      "6": ["Bangladesh", "Bhutan"],
+      "7": ["Thailand", "Vietnam"],
+      "8": ["China", "Singapore"],
+      "9": ["Japan", "South Korea"],
+      "10": ["Australia (Sydney)", "Papua New Guinea"],
+      "11": ["Solomon Islands"],
+      "12": ["New Zealand", "Fiji"]
+    };
+
+    const now = new Date();
+    const utcHours = now.getUTCHours();
+    const utcMinutes = now.getUTCMinutes();
+
+    const targetHour = 3;
+    const targetMinute = 36;
+
+    let targetOffsets = [];
+
+    // Calculate which UTC offsets would produce 3:36 AM or PM
+    [-9, 3].forEach(baseHour => {
+      const offset = (baseHour - utcHours + 24) % 24;
+      const signedOffset = offset > 12 ? offset - 24 : offset; // normalize to range [-12, 12]
+      if (!targetOffsets.includes(signedOffset)) {
+        targetOffsets.push(signedOffset);
+      }
+    });
+
+    let result = [];
+
+    targetOffsets.forEach(offset => {
+      if (timezoneCountries[offset]) {
+        result = result.concat(timezoneCountries[offset]);
+      }
+    });
+
+    const output = document.getElementById("output");
+    output.textContent = `It's 3:36 (AM or PM) in: ${result.join(", ")}.`;
+  </script>
+</body>
+</html>
